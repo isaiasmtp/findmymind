@@ -9,7 +9,7 @@ export enum Role {
   Root = 4,
 }
 
-@Entity({name: "users"})
+@Entity({ name: 'users' })
 export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -27,10 +27,10 @@ export class UserEntity {
   @Exclude()
   password: string;
 
-  @Column({default: false})
+  @Column({ default: false })
   isActive: boolean;
 
-  @Column({default: false})
+  @Column({ default: false })
   isValidated: boolean;
 
   @Column({

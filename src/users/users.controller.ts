@@ -12,9 +12,7 @@ import { CreateUserDTO } from './dto/create-user-dto';
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
-  constructor(
-    private readonly userService: UsersService,
-  ) {}
+  constructor(private readonly userService: UsersService) {}
 
   @Post('create')
   @UseInterceptors(ClassSerializerInterceptor)

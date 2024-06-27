@@ -9,14 +9,14 @@ import { typeOrmConfigAsync } from './configs/typeorm.config';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [UsersModule,
+  imports: [
+    UsersModule,
     AuthModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync(typeOrmConfigAsync),
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],
-  exports: []
+  exports: [],
 })
-
 export class AppModule {}

@@ -1,9 +1,12 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateUserDTO } from './dto/create-user-dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
-
 
 @Injectable()
 export class UsersService {
@@ -30,10 +33,9 @@ export class UsersService {
       const createdUser = await this.userRepository.save(newUser);
       return createdUser;
     } catch (error) {
-      throw new BadRequestException("Failed to create user");
+      throw new BadRequestException('Failed to create user');
     }
   }
-
 
   async update(updateUserDto: any) {
     const existingUser = await this.userRepository.findOne({

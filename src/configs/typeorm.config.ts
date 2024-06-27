@@ -6,7 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerOptions } from 'typeorm';
 
 export default class TypeOrmConfig {
-  static getOrmConfig(configService: ConfigService): TypeOrmModuleOptions {    
+  static getOrmConfig(configService: ConfigService): TypeOrmModuleOptions {
     return {
       type: 'postgres',
       host: configService.get('DB_HOST'),
