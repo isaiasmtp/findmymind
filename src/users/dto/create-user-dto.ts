@@ -1,18 +1,28 @@
-import { IsDateString, IsEmail, IsOptional, IsString, MinLength } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsDateString,
+  IsEmail,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
-export class CreateUserDTO{
+export class CreateUserDTO {
+  @IsEmail()
+  @ApiProperty({ default: 'email@email.com', required: true })
+  email: string;
 
-    @IsEmail()
-    email: string
+  @IsString()
+  @MinLength(6)
+  @ApiProperty({ default: '123456', required: true })
+  password: string;
 
-    @IsString()
-    @MinLength(6)
-    password: string
+  @IsString()
+  @ApiProperty({ default: 'John Doe', required: true })
+  name: string;
 
-    @IsString()
-    name: string
-
-    @IsOptional()
-    @IsDateString()
-    birthAt: string
+  @IsOptional()
+  @IsDateString()
+  @ApiProperty({ default: '', required: true })
+  birthAt: string;
 }
