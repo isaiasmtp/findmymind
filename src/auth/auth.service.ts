@@ -12,16 +12,16 @@ export class AuthService {
     private userRepository: Repository<UserEntity>,
   ) {}
 
-  async createToken(user: UserEntity) {
+  async createToken(user: UserEntity, audience: string, issuer: string, expiresIn: string) {
     const token = this.jwtService.sign(
       {
         id: user.id,
         name: user.name,
       },
       {
-        expiresIn: '7 days',
-        issuer: 'login',
-        audience: 'users',
+        expiresIn,
+        audience,
+        issuer,
       },
     );
 
@@ -47,13 +47,17 @@ export class AuthService {
     const user = await this.getUserByEmail(email);
 
     if (user && password === user.password) {
-      return this.createToken(user);
+      return this.createToken(user, 'users', 'login', '7 days');
     } else {
       throw new UnauthorizedException();
     }
   }
 
-  async forget(email: string) {}
+  async forget(email: string) {
 
-  async reset(password: string, token: string) {}
+  }
+
+  async reset(password: string, token: string) {
+    
+  }
 }
