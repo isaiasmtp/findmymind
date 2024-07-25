@@ -36,18 +36,18 @@ export class AuthService {
     });
   }
 
-  async findOneByEmailToAuth(email: string): Promise<UserEntity | undefined> {
+  async getPasswordByEmail(email: string): Promise<UserEntity | undefined> {
     return await this.userRepository
       .createQueryBuilder()
-      .select('*')
-      .where('email = :email', { email })
+      .select('password')
+      .where({ email })
       .getRawOne();
   }
 
   async login(email: string, password: string) {
-    const user = await this.findOneByEmailToAuth(email);
+    const user = await this.getPasswordByEmail(email);
 
-    if (password === user.password) {
+    if (user && password === user.password) {
       return this.createToken(user);
     } else {
       throw new UnauthorizedException();

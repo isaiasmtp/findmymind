@@ -5,8 +5,10 @@ import { AuthForgetDTO } from './dto/auth-forget-dto';
 import { AuthResetDTO } from './dto/auth-reset-dto';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(
     private readonly userService: UsersService,
