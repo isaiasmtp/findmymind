@@ -25,7 +25,7 @@ export class UsersService {
     });
 
     if (existingUser) {
-      throw new BadRequestException('O email já está em uso');
+      throw new BadRequestException('Failed to create user');
     }
 
     try {

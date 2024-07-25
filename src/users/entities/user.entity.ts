@@ -50,7 +50,7 @@ export class UserEntity {
     type: 'date',
     nullable: true,
   })
-  BirthAt: string;
+  birthAt: string;
 
   @CreateDateColumn({
     type: 'timestamp',

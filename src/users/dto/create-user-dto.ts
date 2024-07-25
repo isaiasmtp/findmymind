@@ -23,6 +23,6 @@ export class CreateUserDTO {
 
   @IsOptional()
   @IsDateString()
-  @ApiProperty({ default: '', required: true })
+  @ApiProperty({ default: '2020-07-10', required: true })
   birthAt: string;
 }

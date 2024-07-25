@@ -20,7 +20,6 @@ export class AuthService {
       },
       {
         expiresIn: '7 days',
-        subject: String(user.id),
         issuer: 'login',
         audience: 'users',
       },
@@ -29,23 +28,23 @@ export class AuthService {
     return { token: token };
   }
 
-  async checkToken(token: string) {
+  async checkToken(token: string, audience: string, issuer: string) {
     return this.jwtService.verify(token, {
-      audience: 'users',
-      issuer: 'login',
+      audience: audience,
+      issuer: issuer,
     });
   }
 
-  async getPasswordByEmail(email: string): Promise<UserEntity | undefined> {
+  async getUserByEmail(email: string): Promise<UserEntity | undefined> {
     return await this.userRepository
       .createQueryBuilder()
-      .select('password')
+      .select('*')
       .where({ email })
       .getRawOne();
   }
 
   async login(email: string, password: string) {
-    const user = await this.getPasswordByEmail(email);
+    const user = await this.getUserByEmail(email);
 
     if (user && password === user.password) {
       return this.createToken(user);
