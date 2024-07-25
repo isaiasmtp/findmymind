@@ -1,7 +1,9 @@
-import { IsEmail } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail } from 'class-validator';
 
-export class AuthForgetDTO{
+export class AuthForgetDTO {
 
-    @IsEmail()
-    email: string
+  @IsEmail()
+  @ApiProperty({ default: 'email@email.com', required: true })
+  email: string;
 }
