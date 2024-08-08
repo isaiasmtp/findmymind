@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/users/entities/user.entity';
@@ -28,11 +28,16 @@ export class AuthService {
     return { token: token };
   }
 
-  async checkToken(token: string, audience: string, issuer: string) {
-    return this.jwtService.verify(token, {
-      audience: audience,
-      issuer: issuer,
-    });
+  verifyToken(token: string, audience: string, issuer: string) {
+    try {
+      return this.jwtService.verify(token, {
+        audience: audience,
+        issuer: issuer,
+      });
+    }
+    catch (e) {
+      throw new BadRequestException(e)
+    }
   }
 
   async getUserByEmail(email: string): Promise<UserEntity | undefined> {
