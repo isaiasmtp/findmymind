@@ -1,13 +1,8 @@
 import { Exclude } from 'class-transformer';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { RoleEntity } from './role.entity';
 
-export enum Role {
-  User = 1,
-  Admin = 2,
-  Master = 3,
-  Root = 4,
-}
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -33,12 +28,8 @@ export class UserEntity {
   @Column({ default: false })
   isValidated: boolean;
 
-  @Column({
-    type: 'enum',
-    default: Role.User,
-    enum: Role,
-  })
-  role: Role;
+  @ManyToOne(() => RoleEntity)
+  role: RoleEntity;
 
   @Column({
     type: 'date',

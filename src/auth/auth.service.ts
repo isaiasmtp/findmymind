@@ -28,6 +28,10 @@ export class AuthService {
     return { token: token };
   }
 
+  decodeToken(token: string) {
+    return this.jwtService.decode(token);
+  }
+
   verifyToken(token: string, audience: string, issuer: string) {
     try {
       return this.jwtService.verify(token, {

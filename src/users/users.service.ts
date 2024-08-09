@@ -19,6 +19,13 @@ export class UsersService {
     return await this.userRepository.findOneBy({ id });
   }
 
+  async show(id: number): Promise<UserEntity | undefined> {
+    return await this.userRepository.findOne({
+      where: { id },
+      relations: ['role']
+    });
+  }
+
   async create(data: CreateUserDTO): Promise<UserEntity | undefined> {
     const existingUser = await this.userRepository.findOne({
       where: { email: data.email },
