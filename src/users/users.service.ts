@@ -22,7 +22,7 @@ export class UsersService {
   async show(id: number): Promise<UserEntity | undefined> {
     return await this.userRepository.findOne({
       where: { id },
-      relations: ['role']
+      relations: ['role'],
     });
   }
 

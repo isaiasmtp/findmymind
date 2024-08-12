@@ -17,9 +17,7 @@ import { CreateUserDTO } from './dto/create-user-dto';
 @ApiTags('user')
 @Controller('user')
 export class UsersController {
-  constructor(
-    private readonly userService: UsersService
-  ) {}
+  constructor(private readonly userService: UsersService) {}
 
   @Post('create')
   @UseInterceptors(ClassSerializerInterceptor)
@@ -29,7 +27,7 @@ export class UsersController {
 
   @Get('info')
   @UseGuards(AuthGuard)
-  async info(@Req() {metadata}) {
-    return {data: metadata};
+  async info(@Req() { metadata }) {
+    return metadata;
   }
 }

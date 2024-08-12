@@ -1,8 +1,13 @@
 import { Exclude } from 'class-transformer';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  BeforeInsert,
+} from 'typeorm';
 import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { RoleEntity } from './role.entity';
-
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -55,4 +60,12 @@ export class UserEntity {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   public updated_at: Date;
+
+  @BeforeInsert()
+  setDefaultRole() {
+    if (!this.role) {
+      this.role = new RoleEntity();
+      this.role.id = 1;
+    }
+  }
 }
