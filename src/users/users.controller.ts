@@ -13,6 +13,7 @@ import { AuthGuard } from '../guards/auth.guard';
 
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from './dto/create-user-dto';
+import { Metadata } from 'src/decorators/metadata.decorator';
 
 @ApiTags('user')
 @Controller('user')
@@ -27,7 +28,7 @@ export class UsersController {
 
   @Get('info')
   @UseGuards(AuthGuard)
-  async info(@Req() { metadata }) {
+  async info(@Metadata() metadata: any) {
     return metadata;
   }
 }
