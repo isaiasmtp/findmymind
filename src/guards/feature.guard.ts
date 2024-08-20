@@ -19,6 +19,8 @@ export class FeatureGuard implements CanActivate {
     const { metadata } = context.switchToHttp().getRequest();
     const { featurePermissions } = metadata;
 
-    return requiredFeatures.every(element => featurePermissions.includes(element));
+    return requiredFeatures.every((element) =>
+      featurePermissions.includes(element),
+    );
   }
 }

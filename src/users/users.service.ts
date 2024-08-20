@@ -7,6 +7,7 @@ import { CreateUserDTO } from './dto/create-user-dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -36,8 +37,10 @@ export class UsersService {
     }
 
     try {
+      data.password = await bcrypt.hash(data.password, await bcrypt.genSalt());
       const newUser = this.userRepository.create(data);
       const createdUser = await this.userRepository.save(newUser);
+      delete createdUser.password;
       return createdUser;
     } catch (error) {
       throw new BadRequestException('Failed to create user');

@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -63,7 +64,7 @@ export class AuthService {
     const issuer = 'login';
     const expiresIn = '7 days';
 
-    if (user && password === user.password) {
+    if (user && (await bcrypt.compare(password, user.password))) {
       return this.createToken(user, issuer, expiresIn);
     } else {
       throw new UnauthorizedException();
