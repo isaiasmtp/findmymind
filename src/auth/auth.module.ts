@@ -5,12 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { JwtModule } from '@nestjs/jwt';
+import { JwtConfigAsync } from 'src/configs/jwt.config';
 
 @Module({
   imports: [
-    JwtModule.register({
-      secret: 'aaaasaassasasasasasasasasasas',
-    }),
+    JwtModule.registerAsync(JwtConfigAsync),
     TypeOrmModule.forFeature([UserEntity]),
   ],
   controllers: [AuthController],

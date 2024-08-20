@@ -32,7 +32,6 @@ export class AuthService {
         issuer,
       },
     );
-
     return { token: token };
   }
 
