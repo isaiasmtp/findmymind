@@ -7,16 +7,37 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { typeOrmConfigAsync } from './configs/typeorm.config';
 import { AuthModule } from './auth/auth.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot([
+      {
+        name: 'short',
+        ttl: 1000,
+        limit: 20,
+      },
+      {
+        name: 'medium',
+        ttl: 10000,
+        limit: 200,
+      },
+    ]),
     UsersModule,
     AuthModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync(typeOrmConfigAsync),
   ],
   controllers: [AppController],
-  providers: [AppService, JwtService],
+  providers: [
+    AppService,
+    JwtService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
   exports: [],
 })
 export class AppModule {}
