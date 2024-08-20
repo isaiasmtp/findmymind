@@ -4,7 +4,6 @@ import {
   Controller,
   Get,
   Post,
-  Req,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -14,6 +13,8 @@ import { AuthGuard } from '../guards/auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from './dto/create-user-dto';
 import { Metadata } from 'src/decorators/metadata.decorator';
+import { Features } from 'src/decorators/feature.decorator';
+import { FeatureGuard } from 'src/guards/feature.guard';
 
 @ApiTags('user')
 @Controller('user')
@@ -26,8 +27,10 @@ export class UsersController {
     return await this.userService.create(body);
   }
 
-  @Get('info')
+  @Features('SHOW_INFO_USERS', 'SHOW_MY_USER')
+  @UseGuards(FeatureGuard)
   @UseGuards(AuthGuard)
+  @Get('info')
   async info(@Metadata() metadata: any) {
     return metadata;
   }
