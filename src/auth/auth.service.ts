@@ -104,7 +104,7 @@ export class AuthService {
       },
     });
 
-    return { ok: 'ok' };
+    return {};
   }
 
   async reset(password: string, token: string) {
