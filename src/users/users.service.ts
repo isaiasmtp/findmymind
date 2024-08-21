@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateUserDTO } from './dto/create-user-dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -58,6 +59,27 @@ export class UsersService {
       return { id: updatedUser.id };
     } catch (error) {
       throw new InternalServerErrorException('Failed to update user');
+    }
+  }
+
+  async updatePassword(email: string, newPassword: string): Promise<void> {
+    const existingUser = await this.userRepository.findOne({
+      where: { email },
+    });
+
+    if (!existingUser) {
+      throw new NotFoundException('User not found');
+    }
+
+    try {
+      const hashedPassword = await bcrypt.hash(
+        newPassword,
+        await bcrypt.genSalt(),
+      );
+      existingUser.password = hashedPassword;
+      await this.userRepository.save(existingUser);
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to update password');
     }
   }
 }

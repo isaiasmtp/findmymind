@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -8,13 +9,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { MailerService } from '@nestjs-modules/mailer';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
+    private readonly userRepository: Repository<UserEntity>,
+    private readonly userService: UsersService,
+    private readonly mailer: MailerService,
   ) {}
 
   async createToken(user: UserEntity, issuer: string, expiresIn: string) {
@@ -70,7 +75,48 @@ export class AuthService {
     }
   }
 
-  async forget(email: string) {}
+  async forget(email: string) {
+    const user = await this.getUserByEmail(email);
 
-  async reset(password: string, token: string) {}
+    if (!user) {
+      throw new UnauthorizedException('Invalid E-mail.');
+    }
+
+    const token = this.jwtService.sign(
+      {
+        id: user.email,
+      },
+      {
+        expiresIn: '30 minutes',
+        subject: String(user.email),
+        issuer: 'forget',
+        audience: 'users',
+      },
+    );
+
+    await this.mailer.sendMail({
+      subject: 'Recuperação de Senha',
+      to: 'email@email.com',
+      template: 'forget-password',
+      context: {
+        name: user.name,
+        link: token,
+      },
+    });
+
+    return { ok: 'ok' };
+  }
+
+  async reset(password: string, token: string) {
+    try {
+      const data = this.jwtService.verify(token, {
+        issuer: 'forget',
+        audience: 'users',
+      });
+
+      await this.userService.updatePassword(data.id, password);
+    } catch (_) {
+      throw new InternalServerErrorException('Failed to update password');
+    }
+  }
 }
