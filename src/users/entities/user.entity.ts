@@ -12,7 +12,7 @@ import { RoleEntity } from './role.entity';
 @Entity({ name: 'users' })
 export class UserEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column({ unique: false })
   name: string;
@@ -40,13 +40,13 @@ export class UserEntity {
     type: 'date',
     nullable: true,
   })
-  expirationDate: string;
+  expirationDate?: string;
 
   @Column({
     type: 'date',
     nullable: true,
   })
-  birthAt: string;
+  birthAt?: string;
 
   @CreateDateColumn({
     type: 'timestamp',
