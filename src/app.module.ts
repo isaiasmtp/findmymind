@@ -20,7 +20,9 @@ const ThrottlerProvide = {
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: process.env.ENV === 'test' ? '.test.env' : '.env'
+    }),
     ThrottlerModule.forRoot(throttlerConfig),
     TypeOrmModule.forRootAsync(typeOrmConfigAsync),
     MailerModule.forRootAsync(mailerConfigAsync),
